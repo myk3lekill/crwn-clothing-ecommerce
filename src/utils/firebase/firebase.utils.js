@@ -36,6 +36,14 @@ export const db = getFirestore()
 // Add a Collection
 export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
   const collectionRef = collection(db, collectionKey)
+  const batch = writeBatch(db)
+  // Transaction batch
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase())
+    batch.set(docRef, object);
+  });
+  await batch.commit();
+  console.log('Batching Finished')
 }
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
