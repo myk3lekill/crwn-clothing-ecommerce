@@ -3,7 +3,7 @@ import DirectoryItem from "../directory-item/directory-item.component";
 
 const Directory = ({categories}) => {
     return (
-        <div className="categories-container">
+        <div className="directory-container">
         {categories.map((category) => (
           <DirectoryItem key={category.id} category ={category}/>
         ))}
