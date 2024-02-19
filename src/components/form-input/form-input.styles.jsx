@@ -6,7 +6,7 @@ const mainColor = 'black';
 const shrinkLabelStyles = css`
   top: -14px;
   font-size: 12px;
-  color: $main-color;
+  color: ${mainColor};
 `
 
 export const FormInputLabel = styled.label`
@@ -40,7 +40,7 @@ export const Input = styled.input`
   }
 
   &:focus ~ ${FormInputLabel} {
-  
+    ${shrinkLabelStyles}
   }
 `
 
