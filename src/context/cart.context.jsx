@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect, useReducer } from "react";
 
+import { createAction } from "../utils/firebase/reducer/reducer.utils";
+
 const addCartItem = (cartItems, productToAdd) => {
     //Find if cartItems contain productToAdd
     const existingCartItem = cartItems.find((cartItem) => cartItem.id === productToAdd.id)
@@ -81,7 +83,7 @@ export const CartProvider = ({ children }) => {
         //2. Generate newCartCount:
         const newCartTotal = newCartItems.reduce((total, cartItem) => total + cartItem.quantity * cartItem.price, 0)
         //3. dispatch new action with payload: {newCartItems, newCartTotal, newCartCount}:
-        dispatch({type: CART_ACTION_TYPES.SET_CART_ITEMS, payload: { cartItems: newCartItems, cartTotal: newCartTotal, cartCount: newCartCount}})
+        dispatch(createAction(CART_ACTION_TYPES.SET_CART_ITEMS, { cartItems: newCartItems, cartTotal: newCartTotal, cartCount: newCartCount}))
 
     }
 
@@ -101,7 +103,7 @@ export const CartProvider = ({ children }) => {
     }
 
     const setIsCartOpen = (bool) => {
-        dispatch({ type: CART_ACTION_TYPES.SET_IS_CART_OPEN, payload: bool });
+        dispatch(createAction( CART_ACTION_TYPES.SET_IS_CART_OPEN, bool ));
     }
 
     const value = { isCartOpen, setIsCartOpen, addItemToCart, removeItemFromCart, clearItemFromCart, cartItems, cartCount, cartTotal };
