@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, useState } from 'react';
+import { createContext, useReducer } from 'react';
 import { createAction } from '../utils/firebase/reducer/reducer.utils';
 
 export const UserContext = createContext({ 
