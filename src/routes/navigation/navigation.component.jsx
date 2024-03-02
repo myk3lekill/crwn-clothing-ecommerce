@@ -4,7 +4,6 @@ import {ReactComponent as CrownLogo} from '../../assets/crown.svg';
 
 import { NavigationContainer, NavLinks, NavLink, LogoContainer } from './navigation.styles'
 
-import { UserContext } from "../../context/user.context";
 import { CartContext } from "../../context/cart.context";
 
 import { signOutUser } from "../../utils/firebase/firebase.utils";
