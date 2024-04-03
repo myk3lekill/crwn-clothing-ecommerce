@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { setCurrentUser } from "./store/user/user.action";
+import { checkUserSession, setCurrentUser } from "./store/user/user.action";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { createUserDocumentFromAuth, getCurrentUser, onAuthStateChangedListener, signOutUser } from './utils/firebase/firebase.utils';
@@ -14,7 +14,7 @@ import Checkout from "./routes/checkout/checkout.component";
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    getCurrentUser().then((user) => console.log(user));
+    dispatch(checkUserSession())
   }, [])
 
   return( 
