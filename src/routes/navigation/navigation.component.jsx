@@ -13,11 +13,17 @@ import CartDropdown from "../../components/cart-dropdown/cart-dropdown.component
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/user.selector";
 
+import { useDispatch } from "react-redux";
+import { signOutStart } from "../../store/user/user.action";
+
 const Navigation = () => {
+  const dispatch = useDispatch();
   
   const currentUser = useSelector(selectCurrentUser)
 
   const isCartOpen = useSelector(selectIsCartOpen)
+
+  const signOutUser = () => dispatch(signOutStart());
 
   // const signOutHandler = async () => {
   //   await signOutUser();
