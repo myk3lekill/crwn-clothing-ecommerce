@@ -28,7 +28,10 @@ const middleWares = [process.env.NODE_ENV === 'development' && logger].filter(
 
 export const store = configureStore({
   reducer: rootReducer,
-  //middleware: middleWares //Remove default Redux Toolkit Middleware (redux thunk middleware) passing our own middleware,
+  middleware: (getDefaultMiddleware) =>  
+    getDefaultMiddleware({
+      //serializableCheck: false,
+  }).concat(middleWares),
 });
 
 // export const persistor = persistStore(store);
