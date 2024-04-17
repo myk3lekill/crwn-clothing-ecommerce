@@ -1,13 +1,13 @@
 export const loggerMiddleware = (store) => (next) => (action) => {
-  if (!action.type) {
-    return next(action);
-  }
+    if(!action.type) {
+        return next(action);
+    }
 
-  console.log('type: ', action.type);
-  console.log('payload: ', action.payload);
-  console.log('currentState: ', store.getState());
+    console.log('type: ', action.type);
+    console.log('payload: ', action.payload);
+    console.log('current state: ', store.getState());
 
-  next(action);
+    next(action);//pass action to the subsequent middleware;
 
-  console.log('next state: ', store.getState());
-};
+    console.log('next state: ', store.getState())
+}

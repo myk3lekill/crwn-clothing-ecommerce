@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-
+import styled from "styled-components";
 export const SpinnerOverlay = styled.div`
   height: 60vh;
   width: 100%;
