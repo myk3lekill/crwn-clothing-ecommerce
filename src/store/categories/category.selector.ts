@@ -4,8 +4,10 @@ import { CategoriesState } from "./category.reducer";
 
 import { CategoryMap } from "./category.types";
 
+import { RootState } from "../store";
+
 // Initial Selector
-const selectCategoryReducer = (state): CategoriesState => {
+const selectCategoryReducer = (state: RootState): CategoriesState => {
   console.log('Selector 1 Fired')
   return state.categories
 };

@@ -3,7 +3,6 @@ import { Category } from "./category.types";
 import { AnyAction } from "redux-saga";
 import { fetchCategoriesStart, fetchCategoriesSuccess, fetchCategoriesFailed } from "./category.action";
 
-
 export type CategoriesState = {
     readonly categories: Category[];
     readonly isLoading: boolean;
