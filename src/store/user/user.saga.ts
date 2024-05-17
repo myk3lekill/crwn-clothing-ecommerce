@@ -1,39 +1,46 @@
-import { takeLatest, put, all, call } from 'redux-saga/effects';
+import { takeLatest, put, all, call } from 'typed-redux-saga/macro';
+
+import { User } from 'firebase/auth';
 
 import { USER_ACTION_TYPES } from './user.types';
 
-import { signInSuccess, signInFailed, signUpSuccess, signUpFailed, signOutSuccess, signOutFailed } from './user.action';
+import { signInSuccess, signInFailed, signUpSuccess, signUpFailed, signOutSuccess, signOutFailed, EmailSignInStart } from './user.action';
 
-import { getCurrentUser, createUserDocumentFromAuth, signInWithGooglePopup, signInAuthUserWithEmailAndPassword, createAuthUserWithEmailAndPassword, signOutUser } from '../../utils/firebase/firebase.utils';
+import { getCurrentUser, createUserDocumentFromAuth, signInWithGooglePopup, signInAuthUserWithEmailAndPassword, createAuthUserWithEmailAndPassword, signOutUser, AdditionalInformation } from '../../utils/firebase/firebase.utils';
 
-export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
+export function* getSnapshotFromUserAuth(userAuth: User, additionalDetails?: AdditionalInformation) {
     try {
-        const userSanpshot = yield call(createUserDocumentFromAuth, userAuth, additionalDetails);
-        yield put(signInSuccess({ id: userSanpshot.id, ...userSanpshot.data() }))
+        const userSanpshot = yield* call(createUserDocumentFromAuth, userAuth, additionalDetails);
+        if(userSanpshot){
+            yield* put(signInSuccess({ id: userSanpshot.id, ...userSanpshot.data() }))
+        }
     } catch (error) {
-        yield put(signInFailed(error));  
+        yield* put(signInFailed(error as Error));  
     }
 }
 
 export function* signInWithGoogle() {
     try {
-        const { user } = yield call(signInWithGooglePopup);
-        yield call(getSnapshotFromUserAuth, user);
+        const { user } = yield* call(signInWithGooglePopup);
+        yield* call(getSnapshotFromUserAuth, user);
     } catch (error) {
-        yield put(signInFailed(error));
+        yield* put(signInFailed(error as Error));
     }
 }
 
-export function* signInWithEmail({payload: {email, password}}) {
+export function* signInWithEmail({payload: {email, password}}: EmailSignInStart) {
     try {
-        const { user } = yield call(
+        const userCredential = yield* call(
             signInAuthUserWithEmailAndPassword,
             email,
             password
         );
-        yield call(getSnapshotFromUserAuth, user);
+        if(userCredential) {
+            const { user } = userCredential
+            yield* call(getSnapshotFromUserAuth, user);
+        }
     } catch (error) {
-        yield put(signInFailed(error))
+        yield* put(signInFailed(error as Error))
     }
 }
 
