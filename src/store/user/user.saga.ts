@@ -4,7 +4,7 @@ import { User } from 'firebase/auth';
 
 import { USER_ACTION_TYPES } from './user.types';
 
-import { signInSuccess, signInFailed, signUpSuccess, signUpFailed, signOutSuccess, signOutFailed, EmailSignInStart } from './user.action';
+import { signInSuccess, signInFailed, signUpSuccess, signUpFailed, signOutSuccess, signOutFailed, EmailSignInStart, SignUpStart, SignUpSuccess } from './user.action';
 
 import { getCurrentUser, createUserDocumentFromAuth, signInWithGooglePopup, signInAuthUserWithEmailAndPassword, createAuthUserWithEmailAndPassword, signOutUser, AdditionalInformation } from '../../utils/firebase/firebase.utils';
 
@@ -46,20 +46,23 @@ export function* signInWithEmail({payload: {email, password}}: EmailSignInStart)
 
 export function* isUserAuthenticted() {
     try {
-        const userAuth = yield call(getCurrentUser);
+        const userAuth = yield* call(getCurrentUser);
         if(!userAuth) return;
         yield call(getSnapshotFromUserAuth, userAuth);
     } catch (error) {
-        yield put(signInFailed(error));
+        yield put(signInFailed(error as Error));
     }
 }
 
-export function* signUp({payload: { email, password, displayName }}) {
+export function* signUp({payload: { email, password, displayName }}: SignUpStart) {
     try {
-        const { user } = yield call(createAuthUserWithEmailAndPassword, email, password);
-        yield put(signUpSuccess(user, { displayName }));
+        const userCredential = yield* call(createAuthUserWithEmailAndPassword, email, password);
+        if(userCredential) {
+            const { user } = userCredential;
+            yield* put(signUpSuccess(user, { displayName }));
+        }
     } catch (error) {
-        yield put(signUpFailed(error))
+        yield* put(signUpFailed(error as Error))
     }
 }
 
@@ -68,11 +71,11 @@ export function* signOut() {
         yield call(signOutUser);
         yield put(signOutSuccess());
     } catch (error) {
-        yield put(signOutFailed())
+        yield put(signOutFailed(error as Error))
     }
 }
 
-export function* signInAfterSignUp({payload: { user, additionalDetails }}) {
+export function* signInAfterSignUp({payload: { user, additionalDetails }}: SignUpSuccess) {
     yield call(getSnapshotFromUserAuth, user, additionalDetails)
 }
 
