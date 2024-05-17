@@ -1,6 +1,5 @@
 import {compose, legacy_createStore as createStore, applyMiddleware, Middleware} from 'redux';
 import logger from 'redux-logger';
-import { loggerMiddleware } from './middleware/logger';
 
 import { persistStore, persistReducer, PersistConfig } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
