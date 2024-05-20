@@ -1,7 +1,7 @@
-import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from "../../utils/firebase/firebase.utils"
-import { useState } from "react"
+import { useState, FormEvent, ChangeEvent } from "react"
+import { AuthError,AuthErrorCodes } from 'firebase/auth'
 import FormInput from '../form-input/form-input.component'
-import './sign-up-form.styles.scss'
+import { SignUpContainer } from './sign-up-form.styles'
 import Button, {BUTTON_TYPE_CLASSES} from "../button/button.component"
 
 import { useDispatch } from "react-redux"
@@ -20,16 +20,11 @@ const SignUpForm = () => {
     const { displayName, email, password, confirmPassword } = formFields;
     const dispatch = useDispatch();
 
-    //User Context setCurrentUser
-    //const { setCurrentUser } = useContext(UserContext)
-
-    //console.log(formFields)
-
     const resetFormFields = () => {
         setFormFields(defaultFormFields)
     }
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
 
         if(password !== confirmPassword) {
@@ -41,7 +36,7 @@ const SignUpForm = () => {
                 //setCurrentUser(user)
                 resetFormFields();
             } catch (error) {
-                if(error.code === 'auth/email-already-in-use') {
+                if((error as AuthError).code === AuthErrorCodes.EMAIL_EXISTS) {
                     alert('Cannot create user, email already in use')
                 } else {
                     console.log('user creation encounter an error', error)
@@ -50,14 +45,14 @@ const SignUpForm = () => {
         }
     }
 
-    const handleChange = (event) => {
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
 
         setFormFields( {...formFields, [name]: value} )
     }
 
     return (
-        <div className="sign-up-container">
+        <SignUpContainer>
             <h2>Don't Have an Account</h2>
             <span>Sign up with your email and password</span>
             <form onSubmit = { handleSubmit }>
@@ -72,7 +67,7 @@ const SignUpForm = () => {
 
                 <Button buttonType={BUTTON_TYPE_CLASSES.base} type="submit" > Sign Up </ Button>
             </form>
-        </div>
+        </SignUpContainer>
     )
 }
 
