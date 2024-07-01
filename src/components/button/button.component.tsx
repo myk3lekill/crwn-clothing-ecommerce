@@ -22,7 +22,7 @@ export type ButtonProps = {
 
 const Button: FC<ButtonProps> = ({ children, buttonType, isLoading, ...otherProps }) => {
     const CustomButton = getButton(buttonType);
-    return <CustomButton {...otherProps}> {children} </CustomButton>
+    return <CustomButton disabled={isLoading} {...otherProps}> {children} </CustomButton>
 };
 
 export default Button
